@@ -15,7 +15,7 @@ lerna-debug.log*
 # OS
 .DS_Store
 
-./command.txt
+command.txt
 
 # Tests
 /coverage
@@ -56,5 +56,7 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+/generated/prisma
 
 /generated/prisma

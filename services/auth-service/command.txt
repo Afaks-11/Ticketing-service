@@ -10,3 +10,5 @@ CREATE NEW DATABASE:
   Cloud: npx create-db (creates a free Prisma Postgres database)
 
 prisma/schema.prisma and run prisma migrate dev
+
+npx prisma migrate dev --name init
