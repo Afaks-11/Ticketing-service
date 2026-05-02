@@ -7,10 +7,10 @@ async function bootstrap() {
   const logger = new Logger('bootstrap');
   const app = await NestFactory.create(AppModule);
 
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 3001;
 
   app.setGlobalPrefix('api');
-  app.use(
+  app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       transform: true,
