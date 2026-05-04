@@ -9,7 +9,7 @@ from .database import Base
 
 class TicketStatus(str, enum.Enum):
     DRAFT = 'draft'
-    ACTIVATE = 'activate'
+    ACTIVE = 'active'
     SOLD_OUT = 'sold_out'
     PAUSED = "paused"
     
@@ -24,17 +24,18 @@ class Event(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     name = Column(String, nullable=False)
     venue = Column(String, nullable=False)
+    event_date=  Column(DateTime, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     deleted_at = Column(DateTime, nullable=True)
     
-    ticket_type = relationship('TicketType', back_populates='event', cascade='all, delete-orphan')
+    ticket_types = relationship('TicketType', back_populates='event', cascade='all, delete-orphan')
     
 class TicketType(Base): 
     __tablename__ = 'ticket_types'
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
-    event_id = Column(Integer, ForeignKey('events.id'), nullable=False)
+    event_id = Column(UUID(as_uuid=True), ForeignKey('events.id'), nullable=False)
     name = Column(String, nullable=False)
     description = Column(String, nullable=False)
     
@@ -47,9 +48,8 @@ class TicketType(Base):
     price = Column(Float, nullable=False)
     currency = Column(String, default='Naira')
     dynamic_pricing_rules = Column(JSON, nullable=True)
-    discount_id = Column(UUID(as_uuid=True), nullable=True)
     
-    age_restriction = Column(Integer, nullable=True)
+    age_restriction = Column(Integer, nullable=False)
     
     sales_start_at = Column(DateTime, nullable=True)
     sales_end_at = Column(DateTime, nullable=True)
@@ -57,9 +57,6 @@ class TicketType(Base):
     status = Column(Enum(TicketStatus), default=TicketStatus.DRAFT)
     is_hidden = Column(Boolean, default=False)
     sales_channel = Column(String, nullable=True)
-    
-    is_seated = Column(Boolean, default=False)
-    seat_map_id = Column(UUID(as_uuid=True), nullable=True)
     
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
