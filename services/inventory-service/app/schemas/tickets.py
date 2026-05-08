@@ -1,14 +1,11 @@
 from pydantic import BaseModel, Field, UUID4
 from datetime import datetime
-from typing import List, Optional, Dict, Any
-
-from .models import TicketStatus
+from typing import Optional, Dict, Any
+from ..models.tickets import TicketStatus # Import the enum from the new models folder
 
 class TicketTypeBase(BaseModel):
     name: str
-    description:str
-    
-    #Capacity & Pricing
+    description: str
     total_quantity: int = Field(..., gt=0)
     price: float = Field(..., ge=0)
     currency: Optional[str] = "Naira"
@@ -20,9 +17,8 @@ class TicketTypeBase(BaseModel):
     is_hidden: Optional[bool] = False
     sales_channel: Optional[str] = None
     age_restriction: int = Field(default=0, ge=0)
-    
+
 class TicketTypeCreate(TicketTypeBase):
-    # We will grab that from the URL path (e.g., POST /events/{event_id}/tickets)
     pass
 
 class TicketTypeUpdate(BaseModel):
@@ -42,8 +38,7 @@ class TicketTypeUpdate(BaseModel):
 
 class TicketTypeResponse(TicketTypeBase):
     id: UUID4
-    event_id: UUID4
-    
+    event_id: UUID4 
     available_quantity: int
     reserved_quantity: int
     sold_quantity: int
@@ -54,25 +49,4 @@ class TicketTypeResponse(TicketTypeBase):
     version: int
     
     class Config:
-        from_attributes = True
-        
-        
-class EventBase(BaseModel):
-    name: str
-    venue: str
-    event_date: datetime
-
-class EventCreate(EventBase):
-    pass
-   
-class EventResponse(EventBase):
-    id: UUID4
-    created_at: datetime
-    updated_at: datetime
-   
-    ticket_types: List[TicketTypeResponse] = []
-    
-    class Config:
-        # This tells Pydantic to read data even if it's not a standard dictionary
-        # (Crucial for reading directly from SQLAlchemy database models)
         from_attributes = True
