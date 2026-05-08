@@ -1,7 +1,11 @@
 import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { TicketsService } from './tickets.service';
+import { TicketsController } from './tickets.controller';
 
 @Module({
-  providers: [TicketsService]
+  imports: [HttpModule],
+  controllers: [TicketsController],
+  providers: [TicketsService],
 })
 export class TicketsModule {}

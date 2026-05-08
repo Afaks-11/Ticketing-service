@@ -8,10 +8,14 @@ export class ReservationsService {
 
   constructor(private readonly httpService: HttpService) {}
 
-  async createReservation(payload: any) {
+  async createReservation(payload: any, authHeader: string) {
     try {
       const response = await lastValueFrom(
-        this.httpService.post(`${this.INVENTORY_URL}/reservations`, payload),
+        this.httpService.post(`${this.INVENTORY_URL}/reservations`, payload, {
+          headers: {
+            Authorization: authHeader,
+          },
+        }),
       );
 
       return response.data;
@@ -27,11 +31,16 @@ export class ReservationsService {
     }
   }
 
-  async getReservation(reservation_id: string) {
+  async getReservation(reservation_id: string, authHeader) {
     try {
       const response = await lastValueFrom(
         this.httpService.get(
           `${this.INVENTORY_URL}/reservations/${reservation_id}`,
+          {
+            headers: {
+              Authorization: authHeader,
+            },
+          },
         ),
       );
 
@@ -47,12 +56,17 @@ export class ReservationsService {
     }
   }
 
-  async extendReservation(reservation_id: string, payload: any) {
+  async extendReservation(reservation_id: string, payload: any, authHeader) {
     try {
       const response = await lastValueFrom(
         this.httpService.patch(
           `${this.INVENTORY_URL}/reservations/${reservation_id}`,
           payload,
+          {
+            headers: {
+              Authorization: authHeader,
+            },
+          },
         ),
       );
 
@@ -69,11 +83,16 @@ export class ReservationsService {
     }
   }
 
-  async deleteReservation(reservation_id: string) {
+  async deleteReservation(reservation_id: string, authHeader) {
     try {
       const response = await lastValueFrom(
         this.httpService.delete(
           `${this.INVENTORY_URL}/reservations/${reservation_id}`,
+          {
+            headers: {
+              Authorization: authHeader,
+            },
+          },
         ),
       );
     } catch (error: any) {

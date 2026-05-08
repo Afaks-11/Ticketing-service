@@ -8,6 +8,7 @@ import {
   Param,
   Req,
   UseGuards,
+  Headers,
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
@@ -19,7 +20,11 @@ export class ReservationsController {
   constructor(private readonly reservationService: ReservationsService) {}
 
   @Post()
-  async createReservation(@Body() body: any, @Req() req: any) {
+  async createReservation(
+    @Body() body: any,
+    @Req() req: any,
+    @Headers('authorization') authHeader: string,
+  ) {
     const userId = req.user.sub || req.user.id;
 
     const payloadForFastAPI = {
@@ -27,31 +32,38 @@ export class ReservationsController {
       user_id: userId,
     };
 
-    return this.reservationService.createReservation(payloadForFastAPI);
+    return this.reservationService.createReservation(
+      payloadForFastAPI,
+      authHeader,
+    );
   }
 
   @Get(':reservation_id')
   async getReservation(
     @Param('reservation_id', ParseUUIDPipe) reservationId: string,
+    @Headers('authorization') authHeader: string,
   ) {
-    return this.reservationService.getReservation(reservationId);
+    return this.reservationService.getReservation(reservationId, authHeader);
   }
 
   @Patch(':reservation_id')
   async extendReservation(
     @Param('reservation_id', ParseUUIDPipe) reservationId: string,
     @Body() updatePayload: any,
+    @Headers('authorization') authHeader: string,
   ) {
     return this.reservationService.extendReservation(
       reservationId,
       updatePayload,
+      authHeader,
     );
   }
 
   @Delete(':reservation_id')
   async deleteReservation(
     @Param('reservation_id', ParseUUIDPipe) reservationId: string,
+    @Headers('authorization') authHeader: string,
   ) {
-    return this.reservationService.deleteReservation(reservationId);
+    return this.reservationService.deleteReservation(reservationId, authHeader);
   }
 }

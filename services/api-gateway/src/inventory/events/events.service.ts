@@ -8,10 +8,14 @@ export class EventsService {
 
   constructor(private readonly httpService: HttpService) {}
 
-  async createEvent(payloadCreate) {
+  async createEvent(payloadCreate, authHeader) {
     try {
       const response = await lastValueFrom(
-        this.httpService.post(`${this.INVENTORY_URL}/events`, payloadCreate),
+        this.httpService.post(`${this.INVENTORY_URL}/events`, payloadCreate, {
+          headers: {
+            Authorization: authHeader,
+          },
+        }),
       );
 
       return response.data;
@@ -26,10 +30,14 @@ export class EventsService {
     }
   }
 
-  async getEvent() {
+  async getEvent(authHeader) {
     try {
       const response = await lastValueFrom(
-        this.httpService.get(`${this.INVENTORY_URL}/events`),
+        this.httpService.get(`${this.INVENTORY_URL}/events`, {
+          headers: {
+            Authorization: authHeader,
+          },
+        }),
       );
 
       return response.data;
@@ -41,6 +49,50 @@ export class EventsService {
         );
       }
       throw new HttpException('Could not connect to Inventory Service', 500);
+    }
+  }
+
+  async getEventById(authHeader, eventId) {
+    try {
+      const response = await lastValueFrom(
+        this.httpService.get(`${this.INVENTORY_URL}/events/${eventId}`, {
+          headers: {
+            Authorization: authHeader,
+          },
+        }),
+      );
+
+      return response.data;
+    } catch (error: any) {
+      if (error.response) {
+        throw new HttpException(
+          error.response.data.detail ||
+            'Could not connect to Inventory Service',
+          error.response.status || 500,
+        );
+      }
+    }
+  }
+
+  async deleteEventById(authHeader, eventId) {
+    try {
+      const response = await lastValueFrom(
+        this.httpService.delete(`${this.INVENTORY_URL}/events/${eventId}`, {
+          headers: {
+            Authorization: authHeader,
+          },
+        }),
+      );
+
+      return response.data;
+    } catch (error: any) {
+      if (error.response) {
+        throw new HttpException(
+          error.response.data.detail ||
+            'Could not connect to Inventory Service',
+          error.response.status || 500,
+        );
+      }
     }
   }
 }
