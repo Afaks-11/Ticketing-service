@@ -5,6 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ReservationsModule } from './inventory/reservations/reservations.module';
 import { TicketsModule } from './inventory/tickets/tickets.module';
 import { EventsModule } from './inventory/events/events.module';
+import { OrderModule } from './order/order.module';
 
 
 @Module({
@@ -18,6 +19,7 @@ import { EventsModule } from './inventory/events/events.module';
     EventsModule,
     TicketsModule,
     ReservationsModule,
+    OrderModule,
   ],
 })
 export class AppModule {}
