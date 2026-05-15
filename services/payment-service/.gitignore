@@ -1,0 +1,8 @@
+venv/
+.venv/
+.env
+
+*.pyo
+*.pyd
+
+*.sqlite3

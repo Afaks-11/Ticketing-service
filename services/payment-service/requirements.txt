@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+asyncpg
+greenlet
+alembic
+stripe
+httpx
+pydantic-settings
+python-jose[cryptography]
